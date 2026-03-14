@@ -32,12 +32,14 @@ def stats(request: Request, period: str | None = None):
                     "games": 0,
                     "buyins": 0,
                     "rebuys": 0,
-                    "addons": 0
+                    "addons": 0,
+                    "winnings": 0,
                 }
 
             player_stats[pg.player_name]["games"] += 1
             player_stats[pg.player_name]["rebuys"] += pg.rebuys
             player_stats[pg.player_name]["addons"] += pg.addons
+            player_stats[pg.player_name]["winnings"] += pg.winnings
 
         game_results = []
 

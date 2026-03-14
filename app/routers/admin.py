@@ -8,8 +8,6 @@ from ..models import Game, PlayerGame
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
-BUY_IN_VALUE = 30
-
 @router.get("/")
 async def admin_home(request: Request):
     if not require_admin(request):
@@ -22,18 +20,26 @@ async def admin_home(request: Request):
 def create_game(
     request: Request,
     date: str = Form(...),
+    buyin_value: str = Form(...),
+    rebuy_value: str = Form(...),
+    addon_value: str = Form(...),
     player_name: list[str] = Form(...),
+    position: list[int] = Form(...),
     rebuys: list[int] = Form(...),
     addons: list[int] = Form(...),
-    position: list[int] = Form(...),
-    profit: list[float] = Form(...)
+    winnings: list[int] = Form(...),
 ):
 
     if not require_admin(request):
         return RedirectResponse("/login")
 
     with Session(engine) as session:
-        game = Game(date=date, buy_in_value=BUY_IN_VALUE)
+        game = Game(
+            date=date,
+            buyin_value=buyin_value,
+            rebuy_value=rebuy_value,
+            addon_value=addon_value,
+        )
         session.add(game)
         session.commit()
         session.refresh(game)
@@ -42,10 +48,10 @@ def create_game(
             result = PlayerGame(
                 game_id=game.id,
                 player_name=player_name[i],
+                position=position[i],
                 rebuys=rebuys[i],
                 addons=addons[i],
-                position=position[i],
-                winnings=profit[i]
+                winnings=winnings[i],
             )
 
             session.add(result)

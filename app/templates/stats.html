@@ -34,6 +34,7 @@ onchange="filterStats(this.value)"
 <th class="p-2 text-left">Total Buy-ins</th>
 <th class="p-2 text-left">Total Re-buys</th>
 <th class="p-2 text-left">Total Add-ons</th>
+<th class="p-2 text-left">Total Winnings</th>
 
 </tr>
 </thead>
@@ -56,6 +57,10 @@ onchange="filterStats(this.value)"
 
 <td class="p-2">
 {{ player_stats[player.name]["addons"] if player.name in player_stats else 0 }}
+</td>
+
+<td class="p-2">
+{{ player_stats[player.name]["winnings"] if player.name in player_stats else 0 }}
 </td>
 
 </tr>
@@ -102,7 +107,7 @@ Total Pot: ${{ g.results | sum(attribute="winnings") }}
 <th class="p-1 text-left">Name</th>
 <th class="p-1 text-left">Re-buys</th>
 <th class="p-1 text-left">Add-on</th>
-<th class="p-1 text-left">Profit ($)</th>
+<th class="p-1 text-left">Winnings ($)</th>
 
 </tr>
 

@@ -13,7 +13,10 @@ function addPlayerRow() {
 <input name="rebuys" type="number" value="0" class="bg-gray-600 p-3 rounded w-20">
 </td>
 <td>
-<input name="addons" type="checkbox" class="bg-gray-600 p-3 rounded w-20">
+<input name="addons" type="number" value="0" class="bg-gray-600 p-3 rounded w-20">
+</td>
+<td>
+<input name="winnings" type="number" value="0" class="bg-gray-600 p-3 rounded w-20" required>
 </td>
 `
 }

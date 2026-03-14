@@ -19,3 +19,4 @@ class PlayerGame(SQLModel, table=True):
     position: int | None = None
     rebuys: int = 0
     addons: int = 0
+    winnings: int = 0

@@ -99,8 +99,8 @@ function addBlindRow(small = "", big = "") {
     let row = document.createElement("tr")
 
     row.innerHTML = `
-<td><input type="number" class="small bg-gray-900 p-2 rounded w-24" value="${small}"></td>
-<td><input type="number" class="big bg-gray-900 p-2 rounded w-24" value="${big}"></td>
+<td><input type="number" class="small bg-gray-600 p-2 rounded w-24" value="${small}"></td>
+<td><input type="number" class="big bg-gray-600 p-2 rounded w-24" value="${big}"></td>
 <td><button onclick="this.parentElement.parentElement.remove()" class="text-red-400">Remove</button></td>
 `
 

@@ -1,0 +1,31 @@
+body {
+    background: radial-gradient(circle, #0b5d2a 0%, #06381a 100%);
+    min-height: 100vh;
+}
+
+.table-card {
+    background: rgba(0,0,0,0.65);
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.chip-button {
+    background: #b91c1c;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-weight: bold;
+}
+
+.chip-button:hover {
+    background: #991b1b;
+}
+
+.nav-link {
+    color: #e5e7eb;
+    margin-right: 20px;
+}
+
+.nav-link:hover {
+    color: white;
+}

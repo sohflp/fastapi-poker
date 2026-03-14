@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="table-card">
+
+<h1 class="text-3xl font-bold mb-6">Admin Panel</h1>
+
+<a href="/logout" class="chip-button mb-6 inline-block">
+Logout
+</a>
+
+<h2 class="text-xl font-bold mb-4">Create Game</h2>
+
+<form method="post" action="/admin/game">
+
+<label>Date</label>
+<input name="date"
+class="bg-gray-900 p-2 rounded w-full mb-6">
+
+<h3 class="font-bold mb-2">Players</h3>
+
+<table class="w-full mb-6">
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Re-buys</th>
+<th>Add-ons</th>
+<th>Position</th>
+<th>Profit ($)</th>
+</tr>
+</thead>
+
+<tbody id="playersTable">
+
+<tr>
+
+<td>
+<input name="player_name"
+class="bg-gray-900 p-2 rounded">
+</td>
+
+<td>
+<input name="rebuys"
+type="number"
+value="0"
+class="bg-gray-900 p-2 rounded w-20">
+</td>
+
+<td>
+<input name="addons"
+type="number"
+value="0"
+class="bg-gray-900 p-2 rounded w-20">
+</td>
+
+<td>
+<input name="position"
+type="number"
+class="bg-gray-900 p-2 rounded w-20">
+</td>
+
+<td>
+<input name="profit"
+type="number"
+class="bg-gray-900 p-2 rounded w-24">
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<button type="button"
+onclick="addPlayerRow()"
+class="chip-button mb-6">
+
+Add Player
+
+</button>
+
+<br>
+
+<button class="chip-button">
+Save Game
+</button>
+
+</form>
+
+</div>
+
+<script>
+
+function addPlayerRow(){
+
+let table = document.getElementById("playersTable")
+
+let row = table.insertRow()
+
+row.innerHTML = `
+<td><input name="player_name" class="bg-gray-900 p-2 rounded"></td>
+<td><input name="rebuys" type="number" value="0" class="bg-gray-900 p-2 rounded w-20"></td>
+<td><input name="addons" type="number" value="0" class="bg-gray-900 p-2 rounded w-20"></td>
+<td><input name="position" type="number" class="bg-gray-900 p-2 rounded w-20"></td>
+<td><input name="profit" type="number" class="bg-gray-900 p-2 rounded w-24"></td>
+`
+
+}
+
+</script>
+
+{% endblock %}

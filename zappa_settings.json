@@ -1,0 +1,9 @@
+{
+  "prod": {
+    "app_function": "app.main.app",
+    "aws_region": "ap-southeast-2",
+    "runtime": "python3.11",
+    "s3_bucket": "poker-app-zappa-deploy",
+    "timeout_seconds": 30
+  }
+}

@@ -1,0 +1,159 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="table-card">
+
+<h1 class="text-3xl font-bold mb-6">Player Statistics</h1>
+
+<!-- FILTER -->
+
+<div class="mb-8">
+
+<select
+class="bg-gray-900 p-2 rounded"
+onchange="filterStats(this.value)"
+>
+
+<option value="all">All Games</option>
+<option value="2026">2026</option>
+<option value="2025">2025</option>
+
+</select>
+
+</div>
+
+<!-- MAIN PLAYER TABLE -->
+
+<table class="w-full mb-12">
+
+<thead class="border-b border-gray-700">
+<tr>
+
+<th class="p-2 text-left">Name</th>
+<th class="p-2 text-left">Total Buy-ins</th>
+<th class="p-2 text-left">Total Re-buys</th>
+<th class="p-2 text-left">Total Add-ons</th>
+
+</tr>
+</thead>
+
+<tbody>
+
+{% for player in players %}
+
+<tr class="border-b border-gray-800">
+
+<td class="p-2">{{ player.name }}</td>
+
+<td class="p-2">
+{{ player_stats[player.name]["games"] if player.name in player_stats else 0 }}
+</td>
+
+<td class="p-2">
+{{ player_stats[player.name]["rebuys"] if player.name in player_stats else 0 }}
+</td>
+
+<td class="p-2">
+{{ player_stats[player.name]["addons"] if player.name in player_stats else 0 }}
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- GAME HISTORY CAROUSEL -->
+
+<div class="table-card">
+
+<h2 class="text-2xl font-bold mb-6">Past Games</h2>
+
+<div class="flex overflow-x-auto space-x-6 pb-4">
+
+{% for g in game_results %}
+
+<div class="min-w-[450px] bg-black bg-opacity-60 rounded p-4">
+
+<h3 class="text-lg font-bold mb-2">
+
+{{ g.game.date }}
+
+</h3>
+
+<p class="text-sm mb-4">
+
+Total Pot: ${{ g.results | sum(attribute="winnings") }}
+
+</p>
+
+<table class="w-full text-sm">
+
+<thead class="border-b border-gray-700">
+
+<tr>
+
+<th class="p-1 text-left">Position</th>
+<th class="p-1 text-left">Name</th>
+<th class="p-1 text-left">Re-buys</th>
+<th class="p-1 text-left">Add-on</th>
+<th class="p-1 text-left">Profit ($)</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for r in g.results %}
+
+<tr class="border-b border-gray-800">
+
+<td class="p-1">{{ r.position }}</td>
+
+<td class="p-1">
+{{ r.player_name }}
+</td>
+
+<td class="p-1">{{ r.rebuys }}</td>
+
+<td class="p-1">{{ r.addons }}</td>
+
+<td class="p-1 text-green-400">
+{{ r.winnings }}
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+<script>
+
+function filterStats(period){
+
+// later you can redirect to backend filtering
+
+window.location = "/stats?period=" + period
+
+}
+
+</script>
+
+{% endblock %}

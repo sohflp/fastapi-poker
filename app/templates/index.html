@@ -3,27 +3,24 @@
 {% block content %}
 
 <div class="table-card">
+    <h1 class="text-3xl font-bold mb-6">Poker Night Dashboard</h1>
 
-<h1 class="text-3xl font-bold mb-6">Poker Night Dashboard</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a href="/timer" class="table-card text-center hover:bg-gray-600">
+            <h2 class="text-xl font-bold">⏱ Game Timer</h2>
+            <p>Control blind levels</p>
+        </a>
 
-<div class="grid grid-cols-3 gap-6">
+        <a href="/stats" class="table-card text-center hover:bg-gray-600">
+            <h2 class="text-xl font-bold">📊 Player Stats</h2>
+            <p>View historical performance</p>
+        </a>
 
-<a href="/timer" class="table-card text-center hover:bg-gray-600">
-<h2 class="text-xl font-bold">⏱ Game Timer</h2>
-<p>Control blind levels</p>
-</a>
-
-<a href="/stats" class="table-card text-center hover:bg-gray-600">
-<h2 class="text-xl font-bold">📊 Player Stats</h2>
-<p>View historical performance</p>
-</a>
-
-<a href="/admin" class="table-card text-center hover:bg-gray-600">
-<h2 class="text-xl font-bold">⚙ Admin Panel</h2>
-<p>Manage games and results</p>
-</a>
-
-</div>
+        <a href="/admin" class="table-card text-center hover:bg-gray-600">
+            <h2 class="text-xl font-bold">⚙ Admin Panel</h2>
+            <p>Manage games and results</p>
+        </a>
+    </div>
 
 </div>
 

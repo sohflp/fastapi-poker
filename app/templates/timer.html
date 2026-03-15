@@ -4,80 +4,74 @@
 
 <div class="table-card text-center mb-10">
 
-<h1 class="text-3xl font-bold mb-6">Poker Timer</h1>
+    <h1 class="text-3xl font-bold mb-6">Poker Timer</h1>
 
-<div class="text-6xl font-bold mb-4" id="timer">
-00:00
-</div>
+    <div class="text-6xl font-bold mb-4" id="timer">
+        00:00
+    </div>
 
-<div class="text-xl mb-6">
-Level <span id="level">1</span>
-<br>
-Blinds <span id="blinds">-</span>
-</div>
+    <div class="text-xl mb-6">
+        Level <span id="level">1</span>
+        <br>
+        Blinds <span id="blinds">-</span>
+    </div>
 
-<div class="space-x-4">
+    <div class="space-x-4">
 
-<button onclick="startTimer()" class="chip-button">
-Start
-</button>
+        <button onclick="startTimer()" class="chip-button">
+            Start
+        </button>
 
-<button onclick="pauseTimer()" class="chip-button">
-Pause
-</button>
+        <button onclick="pauseTimer()" class="chip-button">
+            Pause
+        </button>
 
-<button onclick="resetTimer()" class="chip-button">
-Reset
-</button>
+        <button onclick="resetTimer()" class="chip-button">
+            Reset
+        </button>
 
-</div>
+    </div>
 
 </div>
 
 
 <div class="table-card">
 
-<h2 class="text-xl font-bold mb-6">Timer Configuration</h2>
+    <h2 class="text-xl font-bold mb-6">Timer Configuration</h2>
 
-<label class="block mb-2">Level Duration (minutes)</label>
+    <label class="block mb-2">Level Duration (minutes)</label>
 
-<input
-id="duration"
-type="number"
-min="1"
-value="10"
-class="bg-gray-600 p-2 rounded mb-6 w-40"
-/>
+    <input id="duration" type="number" min="1" value="10" class="bg-gray-600 p-2 rounded mb-6 w-40" />
 
 
-<h3 class="font-bold mb-3">Blind Levels</h3>
+    <h3 class="font-bold mb-3">Blind Levels</h3>
 
-<table class="w-full mb-4">
+    <table class="w-full mb-4">
 
-<thead>
-<tr>
-<th class="text-left">Small Blind</th>
-<th class="text-left">Big Blind</th>
-<th></th>
-</tr>
-</thead>
+        <thead>
+            <tr>
+                <th class="text-left">Small Blind</th>
+                <th class="text-left">Big Blind</th>
+                <th></th>
+            </tr>
+        </thead>
 
-<tbody id="blindTable">
+        <tbody id="blindTable">
 
-</tbody>
+        </tbody>
 
-</table>
+    </table>
 
 
-<button onclick="addBlindRow()" class="chip-button mb-6">
-Add Level
-</button>
+    <button onclick="addBlindRow()" class="chip-button mb-6">
+        Add Level
+    </button>
 
-<br>
+    <br>
 
-<button onclick="saveConfig()" class="chip-button">
-Save Configuration
-</button>
+    <button onclick="saveConfig()" class="chip-button">
+        Save Configuration
+    </button>
 
 </div>
 

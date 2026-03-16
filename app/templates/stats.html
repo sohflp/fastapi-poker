@@ -42,19 +42,19 @@
                 <td class="p-2">{{ player.name }}</td>
 
                 <td class="p-2">
-                    {{ player_stats[player.name]["games"] if player.name in player_stats else 0 }}
+                    {{ player_stats[player.id]["buyins"] if player.id in player_stats else 0 }}
                 </td>
 
                 <td class="p-2">
-                    {{ player_stats[player.name]["rebuys"] if player.name in player_stats else 0 }}
+                    {{ player_stats[player.id]["rebuys"] if player.id in player_stats else 0 }}
                 </td>
 
                 <td class="p-2">
-                    {{ player_stats[player.name]["addons"] if player.name in player_stats else 0 }}
+                    {{ player_stats[player.id]["addons"] if player.id in player_stats else 0 }}
                 </td>
 
                 <td class="p-2">
-                    {{ player_stats[player.name]["winnings"] if player.name in player_stats else 0 }}
+                    {{ player_stats[player.id]["winnings"] if player.id in player_stats else 0 }}
                 </td>
 
             </tr>
@@ -100,7 +100,7 @@
                         <th class="p-1 text-left">Position</th>
                         <th class="p-1 text-left">Name</th>
                         <th class="p-1 text-left">Re-buys</th>
-                        <th class="p-1 text-left">Add-on</th>
+                        <th class="p-1 text-left">Add-ons</th>
                         <th class="p-1 text-left">Winnings ($)</th>
 
                     </tr>

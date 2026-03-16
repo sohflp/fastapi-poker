@@ -25,27 +25,36 @@ def stats(request: Request, period: str | None = None):
         player_games = session.exec(select(PlayerGame)).all()
 
         player_stats = {}
+        player_lookup = {p.id: p.name for p in players}
 
         for pg in player_games:
             if pg.player_id not in player_stats:
                 player_stats[pg.player_id] = {
-                    "games": 0,
                     "buyins": 0,
                     "rebuys": 0,
                     "addons": 0,
                     "winnings": 0,
                 }
 
-            player_stats[pg.player_id]["games"] += 1
+            player_stats[pg.player_id]["buyins"] += 1
             player_stats[pg.player_id]["rebuys"] += pg.rebuys
             player_stats[pg.player_id]["addons"] += pg.addons
             player_stats[pg.player_id]["winnings"] += pg.winnings
+
+        print(player_stats)
 
         game_results = []
 
         for game in games:
             results = [
-                pg for pg in player_games
+                {
+                    "player_name": player_lookup.get(pg.id),
+                    "position": pg.position,
+                    "rebuys": pg.rebuys,
+                    "addons": pg.addons,
+                    "winnings": pg.winnings
+                }
+                for pg in player_games
                 if pg.game_id == game.id
             ]
 

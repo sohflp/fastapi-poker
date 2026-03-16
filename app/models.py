@@ -14,7 +14,7 @@ class Game(SQLModel, table=True):
 
 class PlayerGame(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    player_id: str
+    player_id: int
     game_id: int
     position: int | None = None
     rebuys: int = 0

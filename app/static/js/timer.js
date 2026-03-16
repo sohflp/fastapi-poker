@@ -1,12 +1,29 @@
+const levelSound = new Audio("/static/sounds/level-up.wav")
+const warningSound = new Audio("/static/sounds/warning.wav")
+
 let timerInterval
+let lastLevel = -1
 
 function startTimer() {
 
-    if (!localStorage.getItem("timerStart")) {
+    let paused = localStorage.getItem("timerPaused")
+
+    if(!localStorage.getItem("timerStart")){
         localStorage.setItem("timerStart", Date.now())
     }
 
-    localStorage.setItem("timerPaused", "false")
+    if(paused === "true"){
+
+        let pausedAt = parseInt(localStorage.getItem("pausedAt"))
+        let start = parseInt(localStorage.getItem("timerStart"))
+
+        let pauseDuration = Date.now() - pausedAt
+
+        localStorage.setItem("timerStart", start + pauseDuration)
+
+    }
+
+    localStorage.setItem("timerPaused","false")
 
     runTimer()
 
@@ -15,6 +32,7 @@ function startTimer() {
 function pauseTimer() {
 
     localStorage.setItem("timerPaused", "true")
+    localStorage.setItem("pausedAt", Date.now())
 
     clearInterval(timerInterval)
 
@@ -23,6 +41,8 @@ function pauseTimer() {
 function resetTimer() {
 
     localStorage.removeItem("timerStart")
+    localStorage.removeItem("timerPaused")
+    localStorage.removeItem("pausedAt")
 
     clearInterval(timerInterval)
 
@@ -73,7 +93,18 @@ function updateTimer() {
 
     let level = Math.floor(elapsed / duration)
 
+    if(level !== lastLevel){
+        levelSound.play()
+        lastLevel = level
+    }
+
     let remaining = duration - (elapsed % duration)
+
+    console.log(remaining)
+
+    if(remaining <= 10 && remaining % 2 == 0){
+        warningSound.play()
+    }
 
     let minutes = Math.floor(remaining / 60)
     let seconds = remaining % 60
@@ -138,9 +169,28 @@ function loadConfig() {
 
     if (blinds.length === 0) {
 
-        addBlindRow(25, 50)
-        addBlindRow(50, 100)
         addBlindRow(100, 200)
+        addBlindRow(200, 400)
+        addBlindRow(300, 600)
+        addBlindRow(400, 800)
+        addBlindRow(500, 1000)
+        addBlindRow(600, 1200)
+        addBlindRow(800, 1600)
+        addBlindRow(1000, 2000)
+        addBlindRow(1200, 2400)
+        addBlindRow(1500, 3000)
+        addBlindRow(2000, 4000)
+        addBlindRow(3000, 6000)
+        addBlindRow(4000, 8000)
+        addBlindRow(5000, 10000)
+        addBlindRow(7500, 15000)
+        addBlindRow(10000, 20000)
+        addBlindRow(15000, 30000)
+        addBlindRow(20000, 40000)
+        addBlindRow(25000, 50000)
+        addBlindRow(30000, 60000)
+        addBlindRow(40000, 80000)
+        addBlindRow(50000, 100000)
 
     } else {
 

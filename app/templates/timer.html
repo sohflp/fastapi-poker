@@ -36,8 +36,14 @@
 
 
 <div class="table-card">
-
-    <h2 class="text-xl font-bold mb-6">Timer Configuration</h2>
+    <!-- HEADER -->
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold mb-6">Timer Configuration</h2>
+        
+        <button onclick="saveConfig()" class="chip-button">
+            Save Configuration
+        </button>
+    </div>
 
     <label class="block mb-2">Level Duration (minutes)</label>
 
@@ -46,7 +52,7 @@
 
     <h3 class="font-bold mb-3">Blind Levels</h3>
 
-    <table class="w-full mb-4">
+    <table class="mx-auto">
 
         <thead>
             <tr>
@@ -57,22 +63,15 @@
         </thead>
 
         <tbody id="blindTable">
-
         </tbody>
 
     </table>
 
-
-    <button onclick="addBlindRow()" class="chip-button mb-6">
-        Add Level
-    </button>
-
-    <br>
-
-    <button onclick="saveConfig()" class="chip-button">
-        Save Configuration
-    </button>
-
+    <div class="flex justify-center gap-4 mt-6">
+        <button onclick="addBlindRow()" class="chip-button mb-6">
+            Add Level
+        </button>
+    </div>
 </div>
 
 <script src="static/js/timer.js"></script>

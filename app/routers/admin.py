@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
-from sqlmodel import Session
+from sqlmodel import Session, select
 from ..database import engine
-from ..models import Game, PlayerGame
+from ..models import Game, Player, PlayerGame
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -13,7 +13,16 @@ async def admin_home(request: Request):
     if not require_admin(request):
         return RedirectResponse("/login")
 
-    return templates.TemplateResponse("admin.html", {"request": request})
+    with Session(engine) as session:
+        players = session.exec(select(Player)).all()
+
+    return templates.TemplateResponse(
+        "admin.html", 
+        {
+            "request": request,
+            "players": players
+        }
+    )
 
 
 @router.post("/game")
@@ -23,7 +32,7 @@ def create_game(
     buyin_value: str = Form(...),
     rebuy_value: str = Form(...),
     addon_value: str = Form(...),
-    player_name: list[str] = Form(...),
+    player_id: list[str] = Form(...),
     position: list[int] = Form(...),
     rebuys: list[int] = Form(...),
     addons: list[int] = Form(...),
@@ -44,10 +53,10 @@ def create_game(
         session.commit()
         session.refresh(game)
 
-        for i in range(len(player_name)):
+        for i in range(len(player_id)):
             result = PlayerGame(
                 game_id=game.id,
-                player_name=player_name[i],
+                player_id=player_id[i],
                 position=position[i],
                 rebuys=rebuys[i],
                 addons=addons[i],

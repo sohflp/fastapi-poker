@@ -8,8 +8,11 @@ function updatePositions() {
 
 
 function addPlayerRow() {
+    removeButton.disabled = false;
+
     let table = document.getElementById("playersTable")
     let row = document.createElement("tr")
+    let players = document.getElementById("playerOptionsTemplate").innerHTML
 
     row.innerHTML = `
 <td>
@@ -17,19 +20,21 @@ function addPlayerRow() {
 </td>
 
 <td>
-    <input name="player_name" class="bg-gray-600 p-2 rounded w-36 text-center">
+    <select name="player_id" class="bg-gray-600 p-2 rounded w-36 text-center" required>
+        ${players}
+    </select>
 </td>
 
 <td>
-    <input name="rebuys" type="number" value="0" class="bg-gray-600 p-2 rounded w-20 text-center">
+    <input name="rebuys" type="number" value="0" class="bg-gray-600 p-2 rounded w-20 text-center" required>
 </td>
 
 <td>
-    <input name="addons" type="number" value="0" class="bg-gray-600 p-2 rounded w-20 text-center">
+    <input name="addons" type="number" value="0" class="bg-gray-600 p-2 rounded w-20 text-center" required>
 </td>
 
 <td>
-    <input name="winnings" type="number" value="0" class="bg-gray-600 p-2 rounded w-40 text-center">
+    <input name="winnings" type="number" value="0" class="bg-gray-600 p-2 rounded w-40 text-center" required>
 </td>
 `
     table.appendChild(row)
@@ -39,10 +44,15 @@ function addPlayerRow() {
 
 function removeLastRow() {
     let table = document.getElementById("playersTable")
+    let removeButton = document.getElementById("removeButton")
 
-    if (table.rows.length > 0) {
+    if (table.rows.length > 1) {
         table.deleteRow(table.rows.length - 1)
         updatePositions()
+    }
+    
+    if (table.rows.length == 1) {
+        removeButton.disabled = true;
     }
 }
 

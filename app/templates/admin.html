@@ -15,6 +15,19 @@
         </a>
     </div>
 
+    <!-- LIST OF PLAYERS -->
+    <template id="playerOptionsTemplate">
+        <option value=""></option>
+
+        {% for player in players %}
+
+        <option value="{{ player.id }}">
+            {{ player.name }}
+        </option>
+
+        {% endfor %}
+    </template>
+
     <div class="table-card">
         <form method="post" action="/admin/game">
             <!-- DATE -->
@@ -24,15 +37,18 @@
             <div class="flex gap-4">
                 <div class="flex flex-col">
                     <label class="text-sm font-medium mb-2">Buy-in ($)</label>
-                    <input name="buyin_value" type="number" value="30" class="bg-gray-600 p-3 rounded mb-6 mr-6 w-20" required />
+                    <input name="buyin_value" type="number" value="30" class="bg-gray-600 p-3 rounded mb-6 mr-6 w-20"
+                        required />
                 </div>
                 <div class="flex flex-col">
                     <label class="text-sm font-medium mb-2">Re-buy ($)</label>
-                    <input name="rebuy_value" type="number" value="25" class="bg-gray-600 p-3 rounded mb-6 mr-6 w-20" required />
+                    <input name="rebuy_value" type="number" value="25" class="bg-gray-600 p-3 rounded mb-6 mr-6 w-20"
+                        required />
                 </div>
                 <div class="flex flex-col">
                     <label class="text-sm font-medium mb-2">Add-on ($)</label>
-                    <input name="addon_value" type="number" value="25" class="bg-gray-600 p-3 rounded mb-6 mr-6 w-20" required />
+                    <input name="addon_value" type="number" value="25" class="bg-gray-600 p-3 rounded mb-6 mr-6 w-20"
+                        required />
                 </div>
             </div>
 
@@ -45,7 +61,7 @@
                             <th class="px-3 py-2">Name</th>
                             <th class="px-3 py-2">Re-buys</th>
                             <th class="px-3 py-2">Add-ons</th>
-                            <th class="px-3 py-2">Profit ($)</th>
+                            <th class="px-3 py-2">Winnings ($)</th>
                         </tr>
                     </thead>
 
@@ -60,7 +76,7 @@
                     Add Player
                 </button>
 
-                <button type="button" onclick="removeLastRow()" class="chip-button">
+                <button id="removeButton" type="button" onclick="removeLastRow()" class="chip-button">
                     Remove Last
                 </button>
             </div>

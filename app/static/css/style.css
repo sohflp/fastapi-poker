@@ -22,7 +22,11 @@ body {
 }
 
 .chip-button:hover{
-    background:#991b1b;
+    background:#801313;
+}
+
+.chip-button:disabled{
+    background:#555555;
 }
 
 .nav-link {

@@ -20,15 +20,15 @@ async def timer(request: Request):
 def stats(request: Request, period: str | None = None):
 
     with Session(engine) as session:
-        players = session.exec(select(Player)).all()
         games = session.exec(select(Game)).all()
+        players = session.exec(select(Player)).all()
         player_games = session.exec(select(PlayerGame)).all()
 
         player_stats = {}
 
         for pg in player_games:
-            if pg.player_name not in player_stats:
-                player_stats[pg.player_name] = {
+            if pg.player_id not in player_stats:
+                player_stats[pg.player_id] = {
                     "games": 0,
                     "buyins": 0,
                     "rebuys": 0,
@@ -36,10 +36,10 @@ def stats(request: Request, period: str | None = None):
                     "winnings": 0,
                 }
 
-            player_stats[pg.player_name]["games"] += 1
-            player_stats[pg.player_name]["rebuys"] += pg.rebuys
-            player_stats[pg.player_name]["addons"] += pg.addons
-            player_stats[pg.player_name]["winnings"] += pg.winnings
+            player_stats[pg.player_id]["games"] += 1
+            player_stats[pg.player_id]["rebuys"] += pg.rebuys
+            player_stats[pg.player_id]["addons"] += pg.addons
+            player_stats[pg.player_id]["winnings"] += pg.winnings
 
         game_results = []
 

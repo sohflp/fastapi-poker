@@ -53,7 +53,7 @@
                     {{ player_stats[player.id]["addons"] if player.id in player_stats else 0 }}
                 </td>
 
-                <td class="p-2">
+                <td class="p-2 text-green-400">
                     {{ player_stats[player.id]["winnings"] if player.id in player_stats else 0 }}
                 </td>
 
@@ -81,7 +81,7 @@
 
             <h3 class="text-lg font-bold mb-2">
 
-                {{ g.game.date }}
+                {{ g.game.date | format_datetime }}
 
             </h3>
 
@@ -116,7 +116,7 @@
                         <td class="p-1">{{ r.position }}</td>
 
                         <td class="p-1">
-                            {{ r.player_name }}
+                            {{ r.name }}
                         </td>
 
                         <td class="p-1">{{ r.rebuys }}</td>

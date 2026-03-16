@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 
-from sqlmodel import Session, select
+from sqlmodel import Session, select, desc
 from ..database import engine
 from ..models import Player, Game, PlayerGame
+
+from datetime import datetime
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -20,7 +22,7 @@ async def timer(request: Request):
 def stats(request: Request, period: str | None = None):
 
     with Session(engine) as session:
-        games = session.exec(select(Game)).all()
+        games = session.exec(select(Game).order_by(desc(Game.date))).all()
         players = session.exec(select(Player)).all()
         player_games = session.exec(select(PlayerGame)).all()
 
@@ -48,7 +50,7 @@ def stats(request: Request, period: str | None = None):
         for game in games:
             results = [
                 {
-                    "player_name": player_lookup.get(pg.id),
+                    "name": player_lookup.get(pg.player_id),
                     "position": pg.position,
                     "rebuys": pg.rebuys,
                     "addons": pg.addons,
@@ -72,3 +74,18 @@ def stats(request: Request, period: str | None = None):
             "game_results": game_results
         }
     )
+
+
+# Define a custom filter function
+def format_datetime(value, fmt='%d/%m/%Y'):
+    if value is None:
+        return ""
+
+    # Ensure the value is a datetime object if it comes in as a string
+    if isinstance(value, str):
+        value = datetime.strptime(value, '%Y-%m-%d') # Adjust format as needed
+
+    return value.strftime(fmt)
+
+# Add the custom filter to the Jinja environment
+templates.env.filters["format_datetime"] = format_datetime

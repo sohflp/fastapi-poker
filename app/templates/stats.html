@@ -24,38 +24,26 @@
         <thead class="border-b border-gray-700">
             <tr>
 
+                <th class="p-2 text-left">Rank</th>
                 <th class="p-2 text-left">Name</th>
-                <th class="p-2 text-left">Buy-ins</th>
-                <th class="p-2 text-left">Re-buys</th>
-                <th class="p-2 text-left">Add-ons</th>
-                <th class="p-2 text-left">Winnings ($)</th>
+                <th class="p-2 text-left">1st place</th>
+                <th class="p-2 text-left">2nd place</th>
+                <th class="p-2 text-left">3rd place</th>
 
             </tr>
         </thead>
 
         <tbody>
 
-            {% for player in players %}
+            {% for player in player_stats %}
 
             <tr class="border-b border-gray-800">
 
+                <td class="p-2">{{ player.overall_position }}</td>
                 <td class="p-2">{{ player.name }}</td>
-
-                <td class="p-2">
-                    {{ player_stats[player.id]["buyins"] if player.id in player_stats else 0 }}
-                </td>
-
-                <td class="p-2">
-                    {{ player_stats[player.id]["rebuys"] if player.id in player_stats else 0 }}
-                </td>
-
-                <td class="p-2">
-                    {{ player_stats[player.id]["addons"] if player.id in player_stats else 0 }}
-                </td>
-
-                <td class="p-2 text-green-400">
-                    {{ player_stats[player.id]["winnings"] if player.id in player_stats else 0 }}
-                </td>
+                <td class="p-2">{{ player.first_count }}</td>
+                <td class="p-2">{{ player.second_count }}</td>
+                <td class="p-2">{{ player.third_count }}</td>
 
             </tr>
 

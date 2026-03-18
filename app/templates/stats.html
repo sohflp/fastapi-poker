@@ -17,8 +17,30 @@
 
     </div>
 
-    <!-- MAIN PLAYER TABLE -->
+    <!-- LEGEND -->
+    
+    <div class="flex justify-center gap-4 text-center">
+        <div class="bg-yellow-600 px-4 py-2 rounded-lg">
+            <div class="text-xl">🥇</div>
+            <div class="font-bold">1st</div>
+            <div class="text-sm">10 pts</div>
+        </div>
 
+        <div class="bg-gray-400 px-4 py-2 rounded-lg text-black">
+            <div class="text-xl">🥈</div>
+            <div class="font-bold">2nd</div>
+            <div class="text-sm">5 pts</div>
+        </div>
+
+        <div class="bg-orange-700 px-4 py-2 rounded-lg">
+            <div class="text-xl">🥉</div>
+            <div class="font-bold">3rd</div>
+            <div class="text-sm">2 pts</div>
+        </div>
+    </div>
+
+    <!-- MAIN PLAYER TABLE -->
+    
     <table class="w-full mb-12">
 
         <thead class="border-b border-gray-700">
@@ -26,9 +48,8 @@
 
                 <th class="p-2 text-left">Rank</th>
                 <th class="p-2 text-left">Name</th>
-                <th class="p-2 text-left">1st place</th>
-                <th class="p-2 text-left">2nd place</th>
-                <th class="p-2 text-left">3rd place</th>
+                <th class="p-2 text-left">Podium</th>
+                <th class="p-2 text-left">Total points</th>
 
             </tr>
         </thead>
@@ -39,11 +60,10 @@
 
             <tr class="border-b border-gray-800">
 
-                <td class="p-2">{{ player.overall_position }}</td>
+                <td class="p-2">{{ player.rank }}</td>
                 <td class="p-2">{{ player.name }}</td>
-                <td class="p-2">{{ player.first_count }}</td>
-                <td class="p-2">{{ player.second_count }}</td>
-                <td class="p-2">{{ player.third_count }}</td>
+                <td class="p-2">{{ player.podium }}</td>
+                <td class="p-2">{{ player.total_points }}</td>
 
             </tr>
 
@@ -109,9 +129,9 @@
 
                         {% if r.winnings > 0 %}
                         <td class="p-1 text-green-400">
-                        {% else %}
+                            {% else %}
                         <td class="p-1">
-                        {% endif %}
+                            {% endif %}
                             ${{ r.winnings }}
                         </td>
 

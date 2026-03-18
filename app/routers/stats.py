@@ -12,30 +12,34 @@ router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
 SQL_STATEMENT = text("""
-    WITH player_stats AS (
-        SELECT
-            p.id,
-            p.name,
-            SUM(CASE WHEN pg.position = 1 THEN 1 ELSE 0 END) AS first_count,
-            SUM(CASE WHEN pg.position = 2 THEN 1 ELSE 0 END) AS second_count,
-            SUM(CASE WHEN pg.position = 3 THEN 1 ELSE 0 END) AS third_count
-        FROM Player p
-        LEFT JOIN PlayerGame pg ON p.id = pg.player_id
-        GROUP BY p.id, p.name
-    )
+    WITH
+        player_stats AS (
+            SELECT
+                p.id,
+                p.name,
+                SUM(CASE WHEN pg.position = 1 THEN 1 ELSE 0 END) AS first_count,
+                SUM(CASE WHEN pg.position = 2 THEN 1 ELSE 0 END) AS second_count,
+                SUM(CASE WHEN pg.position = 3 THEN 1 ELSE 0 END) AS third_count
+            FROM Player p
+            LEFT JOIN PlayerGame pg ON p.id = pg.player_id
+            GROUP BY p.id, p.name
+        ),
+        player_points AS (
+            SELECT
+                name,
+                first_count || "-" || second_count || "-" || third_count AS podium,
+                (first_count * 10) + (second_count * 5) + (third_count * 2) AS total_points
+            FROM player_stats
+        )
     SELECT
         RANK() OVER (
-            ORDER BY
-                first_count DESC,
-                second_count DESC,
-                third_count DESC
-        ) AS overall_position,
+            ORDER BY total_points DESC
+        ) AS rank,
         name,
-        first_count,
-        second_count,
-        third_count
-    FROM player_stats
-    ORDER BY overall_position;
+        podium,
+        total_points
+    FROM player_points
+    ORDER BY rank, podium desc;
 """)
 
 

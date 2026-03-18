@@ -38,13 +38,6 @@ SQL_STATEMENT = text("""
     ORDER BY overall_position;
 """)
 
-@router.get("/")
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-@router.get("/timer")
-async def timer(request: Request):
-    return templates.TemplateResponse("timer.html", {"request": request})
 
 @router.get("/stats")
 def stats(request: Request, period: str | None = None):

@@ -16,19 +16,19 @@
         </div>
         {% endif %}
 
-        <form method="post" action="/login">
+        <form method="post" action="login">
 
             <label class="block mb-2">
                 Username
             </label>
 
-            <input name="username" class="w-full bg-gray-600 p-2 rounded mb-4" />
+            <input name="username" class="w-full bg-gray-600 p-2 rounded mb-4" required />
 
             <label class="block mb-2">
                 Password
             </label>
 
-            <input name="password" type="password" class="w-full bg-gray-600 p-2 rounded mb-6" />
+            <input name="password" type="password" class="w-full bg-gray-600 p-2 rounded mb-6" required />
 
             <button type="submit" class="chip-button w-full">
                 Login

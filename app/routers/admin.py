@@ -1,3 +1,6 @@
+import os
+from hashlib import md5
+
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -8,8 +11,9 @@ from ..models import Game, Player, PlayerGame
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
-ADMIN_USER = "admin"
-ADMIN_PASSWORD = "poker123"
+ADMIN_USER = os.getenv('ADMIN_USER')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
+ADMIN_VERIFICATION_HASH = os.getenv('ADMIN_VERIFICATION_HASH')
 
 
 @router.get("/login")
@@ -22,10 +26,15 @@ def login_page(request: Request):
 
 @router.post("/login")
 def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    if username == ADMIN_USER and password == ADMIN_PASSWORD:
+    if not ADMIN_USER or not ADMIN_PASSWORD or not ADMIN_VERIFICATION_HASH:
+        return templates.TemplateResponse(
+            "login.html",
+            {"request": request, "error": "Missing environment variables"}
+        )
 
+    if username == ADMIN_USER and password == ADMIN_PASSWORD:
         response = RedirectResponse("/admin", status_code=302)
-        response.set_cookie("admin", "true")
+        response.set_cookie("admin", ADMIN_VERIFICATION_HASH)
 
         return response
 
@@ -106,7 +115,12 @@ def create_game(
 
 
 def require_admin(request: Request):
-    if request.cookies.get("admin") != "true":
+    if not ADMIN_USER or not ADMIN_PASSWORD or not ADMIN_VERIFICATION_HASH:
+        return False
+
+    admin_hash = md5(ADMIN_USER.encode('utf-8') + ADMIN_PASSWORD.encode('utf-8'))
+
+    if request.cookies.get("admin") != admin_hash.hexdigest():
         return False
 
     return True

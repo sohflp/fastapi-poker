@@ -5,11 +5,6 @@ router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
 
-@router.get("/")
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-
 @router.get("/timer")
 async def timer(request: Request):
     return templates.TemplateResponse("timer.html", {"request": request})

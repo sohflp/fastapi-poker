@@ -19,7 +19,7 @@ ADMIN_VERIFICATION_HASH = os.getenv('ADMIN_VERIFICATION_HASH')
 @router.get("/login")
 def login_page(request: Request):
     return templates.TemplateResponse(
-        "login.html",
+        "admin/login.html",
         {"request": request}
     )
 
@@ -28,7 +28,7 @@ def login_page(request: Request):
 def login(request: Request, username: str = Form(...), password: str = Form(...)):
     if not ADMIN_USER or not ADMIN_PASSWORD or not ADMIN_VERIFICATION_HASH:
         return templates.TemplateResponse(
-            "login.html",
+            "admin/login.html",
             {"request": request, "error": "Missing environment variables"}
         )
 
@@ -53,7 +53,7 @@ def logout():
 
 
 @router.get("/")
-async def admin_home(request: Request):
+async def create_game_page(request: Request):
     if not require_admin(request):
         return RedirectResponse("login")
 
@@ -61,7 +61,7 @@ async def admin_home(request: Request):
         players = session.exec(select(Player)).all()
 
     return templates.TemplateResponse(
-        "admin.html", 
+        "admin/game.html", 
         {
             "request": request,
             "players": players

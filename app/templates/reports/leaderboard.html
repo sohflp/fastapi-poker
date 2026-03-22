@@ -7,19 +7,36 @@
     <h1 class="text-3xl font-bold mb-6">Player Statistics</h1>
 
     <!-- FILTER -->
-
     <div class="mb-8">
-
         <label class="mb-2 mr-2">Season</label>
         <select class="bg-gray-600 p-2 rounded" onchange="filterStats(this.value)">
             <option value="2026">2026</option>
         </select>
-
     </div>
 
     <!-- LEGEND -->
-    
     <div class="flex justify-center gap-4 text-center">
+        {% if f1_mode %}
+        <table class="mx-auto border">
+            <tr class="font-bold">
+                <td class="px-4">🥇 1st</td>
+                <td class="px-4">🥈 2nd</td>
+                <td class="px-4">🥉 3rd</td>
+                <td class="px-4">4️⃣ 4th</td>
+                <td class="px-4">5️⃣ 5th</td>
+                <td class="px-4">6️⃣ 6th</td>
+            </tr>
+
+            <tr>
+                <td>25 pts</td>
+                <td>18 pts</td>
+                <td>15 pts</td>
+                <td>12 pts</td>
+                <td>10 pts</td>
+                <td>8 pts</td>
+            </tr>
+        </table>
+        {% else %}
         <div class="bg-yellow-600 px-4 py-2 rounded-lg">
             <div class="text-xl">🥇</div>
             <div class="font-bold">1st</div>
@@ -37,27 +54,22 @@
             <div class="font-bold">3rd</div>
             <div class="text-sm">2 pts</div>
         </div>
+        {% endif %}
     </div>
 
     <!-- MAIN PLAYER TABLE -->
-    
     <table class="w-full mb-12">
-
         <thead class="border-b border-gray-700">
             <tr>
-
                 <th class="p-2 text-left">Rank</th>
                 <th class="p-2 text-left">Name</th>
                 <th class="p-2 text-left">Podium</th>
                 <th class="p-2 text-left">Total points</th>
-
             </tr>
         </thead>
 
         <tbody>
-
             {% for player in leaderboard %}
-
             <tr class="border-b border-gray-800">
 
                 <td class="p-2">{{ player.rank }}</td>
@@ -66,25 +78,19 @@
                 <td class="p-2">{{ player.total_points }}</td>
 
             </tr>
-
             {% endfor %}
-
         </tbody>
-
     </table>
 
 </div>
 
 <!-- GAME HISTORY CAROUSEL -->
-
 <div class="table-card">
 
-    <h2 class="text-2xl font-bold mb-6">Past Games</h2>
+    <h2 class="text-2xl font-bold mb-6">Past Games ({{ game_results | count }})</h2>
 
     <div class="flex overflow-x-auto space-x-6 pb-4">
-
         {% for g in game_results %}
-
         <div class="min-w-[450px] bg-black bg-opacity-60 rounded p-4">
 
             <h3 class="text-lg font-bold mb-2">
@@ -96,25 +102,18 @@
             </p>
 
             <table class="w-full text-sm">
-
                 <thead class="border-b border-gray-700">
-
                     <tr>
-
                         <th class="p-1 text-left">Rank</th>
                         <th class="p-1 text-left">Name</th>
                         <th class="p-1 text-left">Re-buys</th>
                         <th class="p-1 text-left">Add-ons</th>
                         <th class="p-1 text-left">Prize</th>
-
                     </tr>
-
                 </thead>
 
                 <tbody>
-
                     {% for r in g.results %}
-
                     <tr class="border-b border-gray-800">
 
                         <td class="p-1">{{ r.position }}</td>
@@ -129,40 +128,23 @@
 
                         {% if r.winnings > 0 %}
                         <td class="p-1 text-green-400">
-                            {% else %}
+                        {% else %}
                         <td class="p-1">
-                            {% endif %}
+                        {% endif %}
+
                             ${{ r.winnings }}
                         </td>
 
                     </tr>
-
                     {% endfor %}
-
                 </tbody>
-
             </table>
 
         </div>
-
         {% endfor %}
-
     </div>
 
 </div>
-
-<!-- PLAYERS EVOLUTION CHART -->
-
-<div class="table-card">
-    <canvas id="pokerChart"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
-<script>
-    const chartData = {{player_history | tojson}};
-</script>
-<script src="static/js/stats.js"></script>
 
 <script>
     function filterStats(period) {

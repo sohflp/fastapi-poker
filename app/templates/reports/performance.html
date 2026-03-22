@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="table-card">
+
+    <h1 class="text-3xl font-bold mb-6">Player Performance</h1>
+
+    <!-- FILTER -->
+    <div class="mb-8">
+        <label class="mb-2 mr-2">Season</label>
+        <select class="bg-gray-600 p-2 rounded" onchange="filterStats(this.value)">
+            <option value="2026">2026</option>
+        </select>
+    </div>
+
+    <!-- PLAYERS EVOLUTION CHART -->
+    <div class="table-card">
+        <canvas id="pokerChart"></canvas>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+<script>
+    const chartData = {{performance | tojson}};
+</script>
+<script src="static/js/stats.js"></script>
+
+<script>
+    function filterStats(period) {
+        // later you can redirect to backend filtering
+        window.location = "/stats?period=" + period
+    }
+</script>
+
+{% endblock %}

@@ -59,12 +59,12 @@ WITH
             `4th_count` || "-" ||
             `5th_count` || "-" ||
             `6th_count` AS podium,
-            (`1st_count` * 25) + 
-            (`2nd_count` * 18) + 
-            (`3rd_count` * 15) + 
-            (`4th_count` * 12) + 
-            (`5th_count` * 10) + 
-            (`6th_count` * 8) AS total_points
+            (`1st_count` * 10) + 
+            (`2nd_count` * 6) + 
+            (`3rd_count` * 4) + 
+            (`4th_count` * 3) + 
+            (`5th_count` * 2) + 
+            (`6th_count` * 1) AS total_points
         FROM player_stats
     )
 SELECT

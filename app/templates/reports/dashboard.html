@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1 class="text-3xl font-bold mb-6">Poker Dashboard</h1>
+
+<!-- FILTER -->
+<div class="mb-8">
+    <label class="mb-2 mr-2">Season</label>
+    <select class="bg-gray-600 p-2 rounded" onchange="filterStats(this.value)">
+        <option value="2026">2026</option>
+    </select>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- Total Games -->
+    <div class="table-card text-center">
+        <div class="text-3xl mb-2">🃏</div>
+        <div class="text-sm text-gray-400">Total Games</div>
+        <div class="text-4xl font-bold mt-2">{{ total_games }}</div>
+    </div>
+
+    <!-- Players -->
+    <div class="table-card text-center">
+        <div class="text-3xl mb-2">👥</div>
+        <div class="text-sm text-gray-400">Players Registered</div>
+        <div class="text-4xl font-bold mt-2">{{ total_players }}</div>
+    </div>
+
+    <!-- Total Collected -->
+    <div class="table-card text-center">
+        <div class="text-3xl mb-2">💰</div>
+        <div class="text-sm text-gray-400">Total Collected ($)</div>
+        <div class="text-4xl font-bold mt-2">{{ total_collected }}</div>
+    </div>
+
+    <!-- Buy-ins -->
+    <div class="table-card text-center">
+        <div class="text-3xl mb-2">🎟️</div>
+        <div class="text-sm text-gray-400">Buy-ins</div>
+        <div class="text-4xl font-bold mt-2">{{ total_buyins }}</div>
+    </div>
+
+    <!-- Re-buys -->
+    <div class="table-card text-center">
+        <div class="text-3xl mb-2">🔄</div>
+        <div class="text-sm text-gray-400">Re-buys</div>
+        <div class="text-4xl font-bold mt-2">{{ total_rebuys }}</div>
+    </div>
+
+    <!-- Add-ons -->
+    <div class="table-card text-center">
+        <div class="text-3xl mb-2">➕</div>
+        <div class="text-sm text-gray-400">Add-ons</div>
+        <div class="text-4xl font-bold mt-2">{{ total_addons }}</div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -18,8 +18,53 @@ templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/")
-async def home(request: Request):
-    return RedirectResponse("leaderboard")
+def dashboard(request: Request):
+
+    with Session(engine) as session:
+        games = session.exec(select(Game)).all()
+        players = session.exec(select(Player)).all()
+        player_games = session.exec(select(PlayerGame)).all()
+
+        total_games = len(games)
+        total_players = len(players)
+
+        total_buyins = len(player_games)  # each entry = one buy-in
+        total_rebuys = sum(pg.rebuys for pg in player_games)
+        total_addons = sum(pg.addons for pg in player_games)
+
+        # Build lookup: game_id → values
+        game_lookup = {
+            g.id: {
+                "buyin": g.buyin_value,
+                "rebuy": g.rebuy_value,
+                "addon": g.addon_value
+            }
+            for g in games
+        }
+
+        total_collected = 0
+
+        for pg in player_games:
+            game = game_lookup.get(pg.game_id, {})
+
+            total_collected += (
+                game.get("buyin", 0) +
+                pg.rebuys * game.get("rebuy", 0) +
+                pg.addons * game.get("addon", 0)
+            )
+
+    return templates.TemplateResponse(
+        "reports/dashboard.html",
+        {
+            "request": request,
+            "total_games": total_games,
+            "total_players": total_players,
+            "total_collected": total_collected,
+            "total_buyins": total_buyins,
+            "total_rebuys": total_rebuys,
+            "total_addons": total_addons
+        }
+    )
 
 
 @router.get("/leaderboard")

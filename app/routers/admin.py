@@ -111,7 +111,7 @@ def create_game(
 
         session.commit()
 
-    return RedirectResponse("/stats", status_code=302)
+    return RedirectResponse("/leaderboard", status_code=302)
 
 
 def require_admin(request: Request):

@@ -141,7 +141,7 @@ def stats(request: Request, period: int | None = None):
 def games(request: Request, period: int | None = None):
 
     with Session(engine) as session:
-        games = session.exec(select(Game)).all()
+        games = session.exec(select(Game).order_by(desc("date"))).all()
         players = session.exec(select(Player)).all()
         player_games = session.exec(select(PlayerGame)).all()
 
@@ -242,7 +242,13 @@ def stats(request: Request, period: int | None = None):
             })
 
         # 🔥 Sort: Net Profit DESC, then Games DESC
-        results.sort(key=lambda x: (x["net"], x["games"]), reverse=True)
+        results.sort(
+            key=lambda x: (
+                x["net"],
+                x["games"]
+            ),
+            reverse=True
+        )
 
     return templates.TemplateResponse(
         "reports/finance.html",

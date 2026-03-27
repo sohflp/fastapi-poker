@@ -21,7 +21,10 @@ http://127.0.0.1:8000
 
 Pages available:
 
-- `/` – main dashboard
-- `/timer` – poker timer
-- `/stats` – stats page
-- `/admin` – admin page
+- `/` – Main dashboard
+- `/timer` – Poker timer
+- `/leaderboard` – Leaderboard
+- `/f1leaderboard` – F1 leaderboard
+- `/finance` - Finance dashboard
+- `/performance` – Player performance over time
+- `/admin` – Admin page

@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -18,7 +20,7 @@ templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/")
-def dashboard(request: Request):
+def dashboard(request: Request, period: int | None = None):
 
     with Session(engine) as session:
         games = session.exec(select(Game)).all()
@@ -68,7 +70,7 @@ def dashboard(request: Request):
 
 
 @router.get("/leaderboard")
-def stats(request: Request, period: str | None = None):
+def stats(request: Request, period: int | None = None):
 
     with Session(engine) as session:
         # Select all data from all the tables
@@ -113,7 +115,7 @@ def stats(request: Request, period: str | None = None):
 
 
 @router.get("/f1leaderboard")
-def stats(request: Request, period: str | None = None):
+def stats(request: Request, period: int | None = None):
 
     with Session(engine) as session:
         # Select all data from all the tables
@@ -158,8 +160,82 @@ def stats(request: Request, period: str | None = None):
     )
 
 
+@router.get("/finance")
+def stats(request: Request, period: int | None = None):
+
+    with Session(engine) as session:
+        # Select all data from all the tables
+        players = session.exec(select(Player)).all()
+        games = session.exec(select(Game)).all()
+        player_games = session.exec(select(PlayerGame)).all()
+
+        # Game values lookup
+        game_lookup = {
+            g.id: {
+                "buyin": g.buyin_value,
+                "rebuy": g.rebuy_value,
+                "addon": g.addon_value
+            }
+            for g in games
+        }
+
+        stats = defaultdict(lambda: {
+            "games": 0,
+            "rebuys": 0,
+            "addons": 0,
+            "winnings": 0,
+            "expenses": 0
+        })
+
+        for pg in player_games:
+            game = game_lookup.get(pg.game_id, {})
+
+            stats[pg.player_id]["games"] += 1
+            stats[pg.player_id]["rebuys"] += pg.rebuys
+            stats[pg.player_id]["addons"] += pg.addons
+            stats[pg.player_id]["winnings"] += pg.winnings
+
+            stats[pg.player_id]["expenses"] += (
+                game.get("buyin", 0)
+                + pg.rebuys * game.get("rebuy", 0)
+                + pg.addons * game.get("addon", 0)
+            )
+
+        results = []
+        for p in players:
+            s = stats.get(p.id, {})
+
+            winnings = s.get("winnings", 0)
+            expenses = s.get("expenses", 0)
+
+            net = winnings - expenses
+
+            roi = (net / expenses * 100) if expenses > 0 else 0
+
+            results.append({
+                "name": p.name,
+                "games": s.get("games", 0),
+                "rebuys": s.get("rebuys", 0),
+                "addons": s.get("addons", 0),
+                "winnings": winnings,
+                "expenses": expenses,
+                "net": net,
+                "roi": round(roi, 1)
+            })
+
+        # 🔥 Sort: Net Profit DESC, then Games DESC
+        results.sort(key=lambda x: (x["net"], x["games"]), reverse=True)
+
+    return templates.TemplateResponse(
+        "reports/finance.html",
+        {
+            "request": request,
+            "results": results
+        }
+    )
+
 @router.get("/performance")
-def stats(request: Request, period: str | None = None):
+def stats(request: Request, period: int | None = None):
 
     with Session(engine) as session:
         # Select game and player data

@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="table-card">
+
+    <h1 class="text-3xl font-bold mb-6">Player Finance</h1>
+
+    <!-- FILTER -->
+    <div class="mb-8">
+        <label class="mb-2 mr-2">Season</label>
+        <select class="bg-gray-600 p-2 rounded" onchange="filterStats(this.value)">
+            <option value="2026">2026</option>
+        </select>
+    </div>
+
+    <div class="overflow-x-auto">
+
+        <table class="w-full text-sm md:text-base text-center">
+
+            <thead class="border-b border-gray-700">
+                <tr>
+                    <th class="cursor-pointer hover:text-white" onclick="sortTable(0)" data-col="0">Player</th>
+                    <th class="cursor-pointer hover:text-white" onclick="sortTable(1)" data-col="1">Games</th>
+                    <th class="cursor-pointer hover:text-white" onclick="sortTable(2)" data-col="2">Re-buys</th>
+                    <th class="cursor-pointer hover:text-white" onclick="sortTable(3)" data-col="3">Add-ons</th>
+                    <th class="cursor-pointer hover:text-white" onclick="sortTable(4)" data-col="4">Winnings ($)</th>
+                    <th class="cursor-pointer hover:text-white" onclick="sortTable(5)" data-col="5">Expenses ($)</th>
+                    <th class="cursor-pointer hover:text-white" onclick="sortTable(6)" data-col="6">Net ($)</th>
+                    <th class="cursor-pointer hover:text-white" onclick="sortTable(7)" data-col="7">ROI (%)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for r in results %}
+
+                <tr class="border-t border-gray-700">
+
+                    <td class="py-2 font-semibold">
+                        {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% endif %}
+                        {{ r.name }}
+                    </td>
+
+                    <td>{{ r.games }}</td>
+                    <td>{{ r.rebuys }}</td>
+                    <td>{{ r.addons }}</td>
+
+                    <td class="text-green-400">
+                        {{ r.winnings }}
+                    </td>
+
+                    <td class="text-red-400">
+                        {{ r.expenses }}
+                    </td>
+
+                    <td class="{% if r.net >= 0 %}text-green-400{% else %}text-red-400{% endif %}">
+                        {{ r.net }}
+                    </td>
+
+                    <td class="{% if r.roi >= 0 %}text-green-400{% else %}text-red-400{% endif %}">
+                        {{ r.roi }}%
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="static/js/finance.js"></script>
+
+{% endblock %}

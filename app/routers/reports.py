@@ -8,12 +8,19 @@ from sqlmodel import Session, select, desc
 from ..database import engine
 from ..models import Player, Game, PlayerGame
 from ..services.sql import (
-    SQL_LEADERBOARD,
-    SQL_F1_LEADERBOARD,
     SQL_PLAYER_HISTORY
 )
 
 from datetime import datetime
+
+POINTS_MAP = {
+    1: 10,
+    2: 6,
+    3: 4,
+    4: 3,
+    5: 2,
+    6: 1
+}
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -73,66 +80,79 @@ def dashboard(request: Request, period: int | None = None):
 def stats(request: Request, period: int | None = None):
 
     with Session(engine) as session:
-        # Select all data from all the tables
-        games = session.exec(select(Game).order_by(desc(Game.date))).all()
-        player_games = session.exec(select(PlayerGame)).all()
         players = session.exec(select(Player)).all()
+        player_games = session.exec(select(PlayerGame)).all()
 
-        # Create a lookup table for players
-        player_lookup = {p.id: p.name for p in players}
+        stats = defaultdict(lambda: {
+            "points": 0,
+            "games": 0,
+            "wins": 0,
+            "positions": defaultdict(int)
+        })
 
-        # Calculate player leaderboard
-        leaderboard = session.exec(SQL_LEADERBOARD).fetchall()
+        for pg in player_games:
+            player_id = pg.player_id
+            pos = pg.position
 
-        # Calculate game results
-        game_results = []
-        for game in games:
-            results = [
-                {
-                    "name": player_lookup.get(pg.player_id),
-                    "position": pg.position,
-                    "rebuys": pg.rebuys,
-                    "addons": pg.addons,
-                    "winnings": pg.winnings
-                }
-                for pg in player_games
-                if pg.game_id == game.id
-            ]
+            stats[player_id]["games"] += 1
+            stats[player_id]["positions"][pos] += 1
 
-            game_results.append({
-                "game": game,
-                "results": results
+            # Points
+            stats[player_id]["points"] += POINTS_MAP.get(pos, 0)
+
+            # Wins
+            if pos == 1:
+                stats[player_id]["wins"] += 1
+
+        # Build final result list
+        results = []
+
+        for p in players:
+            s = stats.get(p.id, {})
+
+            results.append({
+                "name": p.name,
+                "points": s.get("points", 0),
+                "games": s.get("games", 0),
+                "wins": s.get("wins", 0),
+                "positions": dict(s.get("positions", {}))
             })
+
+        # 🔥 Sort leaderboard
+        results.sort(
+            key=lambda x: (
+                x["points"],   # primary
+                x["wins"],     # tie-breaker
+                x["games"]     # activity
+            ),
+            reverse=True
+        )
 
     return templates.TemplateResponse(
         "reports/leaderboard.html",
         {
             "request": request,
-            "leaderboard": leaderboard,
-            "game_results": game_results
+            "results": results
         }
     )
 
 
-@router.get("/f1leaderboard")
-def stats(request: Request, period: int | None = None):
+@router.get("/games")
+def games(request: Request, period: int | None = None):
 
     with Session(engine) as session:
-        # Select all data from all the tables
-        games = session.exec(select(Game).order_by(desc(Game.date))).all()
-        player_games = session.exec(select(PlayerGame)).all()
+        games = session.exec(select(Game)).all()
         players = session.exec(select(Player)).all()
+        player_games = session.exec(select(PlayerGame)).all()
 
         # Create a lookup table for players
         player_lookup = {p.id: p.name for p in players}
 
-        # Calculate player F1 leaderboard
-        leaderboard = session.exec(SQL_F1_LEADERBOARD).fetchall()
+        # Build final result list
+        results = []
 
-        # Calculate game results
-        game_results = []
         for game in games:
-            results = [
+            ranking = [
                 {
                     "name": player_lookup.get(pg.player_id),
                     "position": pg.position,
@@ -144,18 +164,16 @@ def stats(request: Request, period: int | None = None):
                 if pg.game_id == game.id
             ]
 
-            game_results.append({
+            results.append({
                 "game": game,
-                "results": results
+                "ranking": ranking
             })
 
     return templates.TemplateResponse(
-        "reports/leaderboard.html",
+        "reports/games.html",
         {
             "request": request,
-            "leaderboard": leaderboard,
-            "game_results": game_results,
-            "f1_mode": True
+            "results": results
         }
     )
 

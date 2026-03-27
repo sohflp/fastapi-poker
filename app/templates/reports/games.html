@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1 class="text-2xl md:text-3xl font-bold mb-6 text-center">
+    Past Games ({{ results | count }})
+</h1>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-4">
+    {% for g in results %}
+    <div class="bg-black bg-opacity-60 rounded p-4">
+
+        <h3 class="text-lg font-bold mb-2">
+            {{ g.game.date | format_datetime }}
+        </h3>
+
+        <p class="text-sm mb-4">
+            Total Pot: <span class="text-green-400">${{ g.ranking | sum(attribute="winnings") }}</span>
+        </p>
+
+        <table class="w-full text-sm">
+            <thead class="border-b border-gray-700">
+                <tr>
+                    <th class="p-1 text-left">Rank</th>
+                    <th class="p-1 text-left">Name</th>
+                    <th class="p-1 text-left">Re-buys</th>
+                    <th class="p-1 text-left">Add-ons</th>
+                    <th class="p-1 text-left">Prize</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for r in g.ranking %}
+                <tr class="border-b border-gray-800">
+
+                    <td class="p-1">{{ r.position }}</td>
+
+                    <td class="p-1">
+                        {{ r.name }}
+                    </td>
+
+                    <td class="p-1">{{ r.rebuys }}</td>
+
+                    <td class="p-1">{{ r.addons }}</td>
+
+                    {% if r.winnings > 0 %}
+                    <td class="p-1 text-green-400">
+                    {% else %}
+                    <td class="p-1">
+                    {% endif %}
+
+                        ${{ r.winnings }}
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

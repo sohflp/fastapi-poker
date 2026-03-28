@@ -168,7 +168,6 @@ function loadConfig() {
     let blinds = JSON.parse(localStorage.getItem("blinds") || "[]")
 
     if (blinds.length === 0) {
-
         addBlindRow(100, 200)
         addBlindRow(200, 400)
         addBlindRow(300, 600)
@@ -178,20 +177,24 @@ function loadConfig() {
         addBlindRow(800, 1600)
         addBlindRow(1000, 2000)
         addBlindRow(1200, 2400)
-        addBlindRow(1500, 3000)
+        addBlindRow(1400, 2800)
+        addBlindRow(1600, 3200)
         addBlindRow(2000, 4000)
+        addBlindRow(2500, 5000)
         addBlindRow(3000, 6000)
         addBlindRow(4000, 8000)
         addBlindRow(5000, 10000)
-        addBlindRow(7500, 15000)
+        addBlindRow(6000, 12000)
+        addBlindRow(8000, 16000)
         addBlindRow(10000, 20000)
         addBlindRow(15000, 30000)
         addBlindRow(20000, 40000)
-        addBlindRow(25000, 50000)
         addBlindRow(30000, 60000)
         addBlindRow(40000, 80000)
         addBlindRow(50000, 100000)
-
+        addBlindRow(60000, 120000)
+        addBlindRow(80000, 160000)
+        addBlindRow(100000, 200000)
     } else {
 
         blinds.forEach(b => addBlindRow(b.small, b.big))

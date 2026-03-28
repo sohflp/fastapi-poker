@@ -7,20 +7,10 @@ from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, select, desc
 from ..database import engine
 from ..models import Player, Game, PlayerGame
-from ..services.sql import (
-    SQL_PLAYER_HISTORY
-)
+from ..services.points import POINTS_MAP
+from ..services.sql import SQL_PLAYER_HISTORY
 
 from datetime import datetime
-
-POINTS_MAP = {
-    1: 10,
-    2: 6,
-    3: 4,
-    4: 3,
-    5: 2,
-    6: 1
-}
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -257,6 +247,7 @@ def stats(request: Request, period: int | None = None):
             "results": results
         }
     )
+
 
 @router.get("/performance")
 def stats(request: Request, period: int | None = None):

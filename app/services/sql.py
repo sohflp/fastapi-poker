@@ -1,6 +1,7 @@
 from sqlalchemy import text 
+from .points import POINTS_MAP
 
-SQL_PLAYER_HISTORY = text("""
+SQL_PLAYER_HISTORY = text(f"""
 WITH 
     game_dates AS (
         SELECT DISTINCT date
@@ -27,9 +28,12 @@ WITH
             pg.player_id,
             g.date,
             CASE
-                WHEN pg.position = 1 THEN 10
-                WHEN pg.position = 2 THEN 5
-                WHEN pg.position = 3 THEN 2
+                WHEN pg.position = 1 THEN {POINTS_MAP[1]}
+                WHEN pg.position = 2 THEN {POINTS_MAP[2]}
+                WHEN pg.position = 3 THEN {POINTS_MAP[3]}
+                WHEN pg.position = 4 THEN {POINTS_MAP[4]}
+                WHEN pg.position = 5 THEN {POINTS_MAP[5]}
+                WHEN pg.position = 6 THEN {POINTS_MAP[6]}
                 ELSE 0
             END AS points
         FROM PlayerGame pg

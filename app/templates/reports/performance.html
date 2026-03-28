@@ -11,17 +11,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-    const chartData = {{performance | tojson}};
-
-    const series = chartData.datasets
-        .filter(ds => ds.data.some(v => v > 0))
-        .map(ds => ({
-            name: ds.label,
-            data: ds.data,
-            color: ds.borderColor
-    }));
-
-    const categories = chartData.labels;
+    const series = {{series | tojson}}
+    const categories = {{categories | tojson}}
 </script>
 <script src="static/js/performance.js"></script>
 

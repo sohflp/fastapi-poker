@@ -9,7 +9,9 @@ WITH
     ),
 
     players AS (
-        SELECT id AS player_id
+        SELECT 
+            id   AS player_id,
+            name AS player_name
         FROM Player
     ),
 
@@ -17,6 +19,7 @@ WITH
     player_dates AS (
         SELECT
             p.player_id,
+            p.player_name,
             d.date
         FROM players p
         CROSS JOIN game_dates d
@@ -55,6 +58,7 @@ WITH
 -- Final: fill missing dates
 SELECT
     pd.player_id,
+    pd.player_name,
     COALESCE(
         (
             SELECT cp.total_points
@@ -67,5 +71,5 @@ SELECT
         0
     ) AS total_points
 FROM player_dates pd
-ORDER BY pd.player_id, pd.date DESC;
+ORDER BY pd.date DESC, total_points DESC;
 """)

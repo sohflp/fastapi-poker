@@ -253,38 +253,42 @@ def stats(request: Request, period: int | None = None):
 def stats(request: Request, period: int | None = None):
 
     with Session(engine) as session:
-        # Select game and player data
+        # Select game data
         games = session.exec(select(Game).order_by(desc(Game.date))).all()
-        players = session.exec(select(Player)).all()
 
-        # Extract game dates only
-        game_dates = [game.date for game in games]
-
-        # Select player history
+        # Select player history (custom SQL query)
         player_history = session.exec(SQL_PLAYER_HISTORY).fetchall()
 
-        # Combine game, player and performance results for the line chart
-        performance = {
-            "labels": game_dates,
-            "datasets": [
-                {
-                    "label": player.name,
-                    "data": [
-                        history.total_points
-                        for history in player_history
-                        if history.player_id == player.id
-                    ],
-                    "hidden": False # Update later (if required)
-                }
-                for player in players
-            ]
-        }
+        # Create unique list of players based on ranking
+        players = list(dict.fromkeys(
+            (ph.player_id, ph.player_name) 
+            for ph in player_history
+        ))
+
+        print(players)
+
+        # Combine cumulative player points across the season
+        series = [
+            {
+                "name": player[1],
+                "data": [
+                    history.total_points
+                    for history in player_history
+                    if history.player_id == player[0]
+                ]
+            }
+            for player in players
+        ]
+
+        # Extract game dates only
+        categories = [game.date for game in games]
 
     return templates.TemplateResponse(
         "reports/performance.html",
         {
             "request": request,
-            "performance": performance
+            "series": series,
+            "categories": categories
         }
     )
 
